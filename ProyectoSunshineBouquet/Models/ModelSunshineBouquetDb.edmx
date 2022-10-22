@@ -1,0 +1,247 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="DBSBProductoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Grado">
+          <Key>
+            <PropertyRef Name="GradoId" />
+          </Key>
+          <Property Name="GradoId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GradoNombre" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Producto">
+          <Key>
+            <PropertyRef Name="ProductoId" />
+          </Key>
+          <Property Name="ProductoId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductoNombre" Type="varchar" MaxLength="60" />
+          <Property Name="ProductoEspecie" Type="varchar" MaxLength="60" />
+        </EntityType>
+        <EntityType Name="ProductoGrado">
+          <Key>
+            <PropertyRef Name="ProductoGradoId" />
+            <PropertyRef Name="ProductoId" />
+          </Key>
+          <Property Name="ProductoGradoId" Type="int" Nullable="false" />
+          <Property Name="ProductoId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ProductoVariedad">
+          <Key>
+            <PropertyRef Name="ProductoVariedadId" />
+            <PropertyRef Name="ProductoId" />
+          </Key>
+          <Property Name="ProductoVariedadId" Type="int" Nullable="false" />
+          <Property Name="ProductoId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Variedad">
+          <Key>
+            <PropertyRef Name="VariedadId" />
+          </Key>
+          <Property Name="VariedadId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VariedadCodigo" Type="varchar" MaxLength="20" />
+          <Property Name="VariedadNombre" Type="varchar" MaxLength="50" />
+          <Property Name="VariedadColor" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_ProductoGrado_Producto">
+          <End Role="Producto" Type="Self.Producto" Multiplicity="1" />
+          <End Role="ProductoGrado" Type="Self.ProductoGrado" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producto">
+              <PropertyRef Name="ProductoId" />
+            </Principal>
+            <Dependent Role="ProductoGrado">
+              <PropertyRef Name="ProductoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductoVariedad_Producto">
+          <End Role="Producto" Type="Self.Producto" Multiplicity="1" />
+          <End Role="ProductoVariedad" Type="Self.ProductoVariedad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producto">
+              <PropertyRef Name="ProductoId" />
+            </Principal>
+            <Dependent Role="ProductoVariedad">
+              <PropertyRef Name="ProductoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DBSBProductoModelStoreContainer">
+          <EntitySet Name="Grado" EntityType="Self.Grado" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Producto" EntityType="Self.Producto" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductoGrado" EntityType="Self.ProductoGrado" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductoVariedad" EntityType="Self.ProductoVariedad" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Variedad" EntityType="Self.Variedad" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_ProductoGrado_Producto" Association="Self.FK_ProductoGrado_Producto">
+            <End Role="Producto" EntitySet="Producto" />
+            <End Role="ProductoGrado" EntitySet="ProductoGrado" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductoVariedad_Producto" Association="Self.FK_ProductoVariedad_Producto">
+            <End Role="Producto" EntitySet="Producto" />
+            <End Role="ProductoVariedad" EntitySet="ProductoVariedad" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DBSBProductoModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Grado">
+          <Key>
+            <PropertyRef Name="GradoId" />
+          </Key>
+          <Property Name="GradoId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GradoNombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Producto">
+          <Key>
+            <PropertyRef Name="ProductoId" />
+          </Key>
+          <Property Name="ProductoId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductoNombre" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="ProductoEspecie" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ProductoGrado" Relationship="Self.FK_ProductoGrado_Producto" FromRole="Producto" ToRole="ProductoGrado" />
+          <NavigationProperty Name="ProductoVariedad" Relationship="Self.FK_ProductoVariedad_Producto" FromRole="Producto" ToRole="ProductoVariedad" />
+        </EntityType>
+        <EntityType Name="ProductoGrado">
+          <Key>
+            <PropertyRef Name="ProductoGradoId" />
+            <PropertyRef Name="ProductoId" />
+          </Key>
+          <Property Name="ProductoGradoId" Type="Int32" Nullable="false" />
+          <Property Name="ProductoId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Producto" Relationship="Self.FK_ProductoGrado_Producto" FromRole="ProductoGrado" ToRole="Producto" />
+        </EntityType>
+        <EntityType Name="ProductoVariedad">
+          <Key>
+            <PropertyRef Name="ProductoVariedadId" />
+            <PropertyRef Name="ProductoId" />
+          </Key>
+          <Property Name="ProductoVariedadId" Type="Int32" Nullable="false" />
+          <Property Name="ProductoId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Producto" Relationship="Self.FK_ProductoVariedad_Producto" FromRole="ProductoVariedad" ToRole="Producto" />
+        </EntityType>
+        <EntityType Name="Variedad">
+          <Key>
+            <PropertyRef Name="VariedadId" />
+          </Key>
+          <Property Name="VariedadId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VariedadCodigo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="VariedadNombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="VariedadColor" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="FK_ProductoGrado_Producto">
+          <End Role="Producto" Type="Self.Producto" Multiplicity="1" />
+          <End Role="ProductoGrado" Type="Self.ProductoGrado" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producto">
+              <PropertyRef Name="ProductoId" />
+            </Principal>
+            <Dependent Role="ProductoGrado">
+              <PropertyRef Name="ProductoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductoVariedad_Producto">
+          <End Role="Producto" Type="Self.Producto" Multiplicity="1" />
+          <End Role="ProductoVariedad" Type="Self.ProductoVariedad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producto">
+              <PropertyRef Name="ProductoId" />
+            </Principal>
+            <Dependent Role="ProductoVariedad">
+              <PropertyRef Name="ProductoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DBSBProductoEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Grado" EntityType="Self.Grado" />
+          <EntitySet Name="Producto" EntityType="Self.Producto" />
+          <EntitySet Name="ProductoGrado" EntityType="Self.ProductoGrado" />
+          <EntitySet Name="ProductoVariedad" EntityType="Self.ProductoVariedad" />
+          <EntitySet Name="Variedad" EntityType="Self.Variedad" />
+          <AssociationSet Name="FK_ProductoGrado_Producto" Association="Self.FK_ProductoGrado_Producto">
+            <End Role="Producto" EntitySet="Producto" />
+            <End Role="ProductoGrado" EntitySet="ProductoGrado" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductoVariedad_Producto" Association="Self.FK_ProductoVariedad_Producto">
+            <End Role="Producto" EntitySet="Producto" />
+            <End Role="ProductoVariedad" EntitySet="ProductoVariedad" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DBSBProductoModelStoreContainer" CdmEntityContainer="DBSBProductoEntities1">
+          <EntitySetMapping Name="Grado">
+            <EntityTypeMapping TypeName="DBSBProductoModel.Grado">
+              <MappingFragment StoreEntitySet="Grado">
+                <ScalarProperty Name="GradoId" ColumnName="GradoId" />
+                <ScalarProperty Name="GradoNombre" ColumnName="GradoNombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Producto">
+            <EntityTypeMapping TypeName="DBSBProductoModel.Producto">
+              <MappingFragment StoreEntitySet="Producto">
+                <ScalarProperty Name="ProductoId" ColumnName="ProductoId" />
+                <ScalarProperty Name="ProductoNombre" ColumnName="ProductoNombre" />
+                <ScalarProperty Name="ProductoEspecie" ColumnName="ProductoEspecie" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductoGrado">
+            <EntityTypeMapping TypeName="DBSBProductoModel.ProductoGrado">
+              <MappingFragment StoreEntitySet="ProductoGrado">
+                <ScalarProperty Name="ProductoGradoId" ColumnName="ProductoGradoId" />
+                <ScalarProperty Name="ProductoId" ColumnName="ProductoId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductoVariedad">
+            <EntityTypeMapping TypeName="DBSBProductoModel.ProductoVariedad">
+              <MappingFragment StoreEntitySet="ProductoVariedad">
+                <ScalarProperty Name="ProductoVariedadId" ColumnName="ProductoVariedadId" />
+                <ScalarProperty Name="ProductoId" ColumnName="ProductoId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Variedad">
+            <EntityTypeMapping TypeName="DBSBProductoModel.Variedad">
+              <MappingFragment StoreEntitySet="Variedad">
+                <ScalarProperty Name="VariedadId" ColumnName="VariedadId" />
+                <ScalarProperty Name="VariedadCodigo" ColumnName="VariedadCodigo" />
+                <ScalarProperty Name="VariedadNombre" ColumnName="VariedadNombre" />
+                <ScalarProperty Name="VariedadColor" ColumnName="VariedadColor" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

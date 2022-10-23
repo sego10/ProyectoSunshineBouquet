@@ -30,5 +30,6 @@ namespace ProyectoSunshineBouquet.Models
         public virtual DbSet<ProductoGrado> ProductoGrado { get; set; }
         public virtual DbSet<ProductoVariedad> ProductoVariedad { get; set; }
         public virtual DbSet<Variedad> Variedad { get; set; }
+        public virtual DbSet<Archivo> Archivo { get; set; }
     }
 }

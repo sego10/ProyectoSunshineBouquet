@@ -4,7 +4,17 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="DBSBProductoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="DBSBProductoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Archivo">
+          <Key>
+            <PropertyRef Name="ArchivoId" />
+          </Key>
+          <Property Name="ArchivoId" Type="int" Nullable="false" />
+          <Property Name="ProductoId" Type="int" Nullable="false" />
+          <Property Name="ArchivoNombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ArchivoContenido" Type="varbinary(max)" Nullable="false" />
+          <Property Name="ArchivoExtension" Type="char" MaxLength="5" Nullable="false" />
+        </EntityType>
         <EntityType Name="Grado">
           <Key>
             <PropertyRef Name="GradoId" />
@@ -45,6 +55,18 @@
           <Property Name="VariedadNombre" Type="varchar" MaxLength="50" />
           <Property Name="VariedadColor" Type="varchar" MaxLength="50" />
         </EntityType>
+        <Association Name="FK_Archivo_Producto">
+          <End Role="Producto" Type="Self.Producto" Multiplicity="1" />
+          <End Role="Archivo" Type="Self.Archivo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producto">
+              <PropertyRef Name="ProductoId" />
+            </Principal>
+            <Dependent Role="Archivo">
+              <PropertyRef Name="ProductoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ProductoGrado_Producto">
           <End Role="Producto" Type="Self.Producto" Multiplicity="1" />
           <End Role="ProductoGrado" Type="Self.ProductoGrado" Multiplicity="*" />
@@ -70,11 +92,16 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="DBSBProductoModelStoreContainer">
+          <EntitySet Name="Archivo" EntityType="Self.Archivo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Grado" EntityType="Self.Grado" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Producto" EntityType="Self.Producto" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductoGrado" EntityType="Self.ProductoGrado" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductoVariedad" EntityType="Self.ProductoVariedad" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Variedad" EntityType="Self.Variedad" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Archivo_Producto" Association="Self.FK_Archivo_Producto">
+            <End Role="Producto" EntitySet="Producto" />
+            <End Role="Archivo" EntitySet="Archivo" />
+          </AssociationSet>
           <AssociationSet Name="FK_ProductoGrado_Producto" Association="Self.FK_ProductoGrado_Producto">
             <End Role="Producto" EntitySet="Producto" />
             <End Role="ProductoGrado" EntitySet="ProductoGrado" />
@@ -84,8 +111,7 @@
             <End Role="ProductoVariedad" EntitySet="ProductoVariedad" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DBSBProductoModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -105,6 +131,7 @@
           <Property Name="ProductoEspecie" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="ProductoGrado" Relationship="Self.FK_ProductoGrado_Producto" FromRole="Producto" ToRole="ProductoGrado" />
           <NavigationProperty Name="ProductoVariedad" Relationship="Self.FK_ProductoVariedad_Producto" FromRole="Producto" ToRole="ProductoVariedad" />
+          <NavigationProperty Name="Archivo" Relationship="DBSBProductoModel.FK_Archivo_Producto" FromRole="Producto" ToRole="Archivo" />
         </EntityType>
         <EntityType Name="ProductoGrado">
           <Key>
@@ -171,7 +198,35 @@
             <End Role="Producto" EntitySet="Producto" />
             <End Role="ProductoVariedad" EntitySet="ProductoVariedad" />
           </AssociationSet>
+          <EntitySet Name="Archivo" EntityType="DBSBProductoModel.Archivo" />
+          <AssociationSet Name="FK_Archivo_Producto" Association="DBSBProductoModel.FK_Archivo_Producto">
+            <End Role="Producto" EntitySet="Producto" />
+            <End Role="Archivo" EntitySet="Archivo" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Archivo">
+          <Key>
+            <PropertyRef Name="ArchivoId" />
+          </Key>
+          <Property Name="ArchivoId" Type="Int32" Nullable="false" />
+          <Property Name="ProductoId" Type="Int32" Nullable="false" />
+          <Property Name="ArchivoNombre" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ArchivoContenido" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+          <Property Name="ArchivoExtension" Type="String" Nullable="false" MaxLength="5" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="Producto" Relationship="DBSBProductoModel.FK_Archivo_Producto" FromRole="Archivo" ToRole="Producto" />
+        </EntityType>
+        <Association Name="FK_Archivo_Producto">
+          <End Type="DBSBProductoModel.Producto" Role="Producto" Multiplicity="1" />
+          <End Type="DBSBProductoModel.Archivo" Role="Archivo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producto">
+              <PropertyRef Name="ProductoId" />
+            </Principal>
+            <Dependent Role="Archivo">
+              <PropertyRef Name="ProductoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -218,6 +273,17 @@
                 <ScalarProperty Name="VariedadCodigo" ColumnName="VariedadCodigo" />
                 <ScalarProperty Name="VariedadNombre" ColumnName="VariedadNombre" />
                 <ScalarProperty Name="VariedadColor" ColumnName="VariedadColor" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Archivo">
+            <EntityTypeMapping TypeName="DBSBProductoModel.Archivo">
+              <MappingFragment StoreEntitySet="Archivo">
+                <ScalarProperty Name="ArchivoExtension" ColumnName="ArchivoExtension" />
+                <ScalarProperty Name="ArchivoContenido" ColumnName="ArchivoContenido" />
+                <ScalarProperty Name="ArchivoNombre" ColumnName="ArchivoNombre" />
+                <ScalarProperty Name="ProductoId" ColumnName="ProductoId" />
+                <ScalarProperty Name="ArchivoId" ColumnName="ArchivoId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

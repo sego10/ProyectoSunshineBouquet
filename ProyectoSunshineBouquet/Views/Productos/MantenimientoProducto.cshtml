@@ -1,0 +1,130 @@
+﻿@model ProyectoSunshineBouquet.Models.Producto
+
+
+@{
+    ViewBag.Title = "MantenimientoProducto";
+}
+
+<h2>Descripción del Producto</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <hr />
+    <div class="form-horizontal">
+        @*<h4>Producto</h4>*@
+
+        <div class="row">
+            <div class="col-md-6">
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @*@Html.HiddenFor(model => model.ProductoId)*@
+                <div class="form-group">
+                    @*@Html.Label("ProductoCodigo", "Id", htmlAttributes: new { @class = "control-label col-md-2" })*@
+                    @*@Html.LabelFor(model => model.ProductoCodigo, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.ProductoCodigo, new { htmlAttributes = new { @class = "form-control", placeholder = "ID", @data_val = "true", @required = "required" } })
+                        @Html.ValidationMessageFor(model => model.ProductoCodigo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @*@Html.Label("ProductoNombre","", htmlAttributes: new { @class = "control-label col-md-2" })*@
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.ProductoNombre, new { htmlAttributes = new { @class = "form-control", placeholder = "Nombre", @data_val = "true", @required = "required" } })
+                        @Html.ValidationMessageFor(model => model.ProductoNombre, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @*@Html.LabelFor(model => model.ProductoEspecie, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.ProductoEspecie, new { htmlAttributes = new { @class = "form-control", placeholder = "Especie", @data_val = "true", @required = "required" } })
+                        @Html.ValidationMessageFor(model => model.ProductoEspecie, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                Imagen
+            </div>
+        </div>
+
+        @* Carga de archivo *@
+        <!--<div class="row">
+            <div class="col-md-6">
+            </div>
+
+            <div class="col-md-6">
+                <fieldset>
+                    <legend>
+                        Cargar Imagen
+                        <a onclick="Upload()">
+                            <input style="margin-bottom: 6px" type="submit" value="Subir" id="Submit" class="btn btn-default col-lg-offset-9" />
+                        </a>
+
+                    </legend>
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.AntiForgeryToken()
+                    <div class="form-horizontal">
+                        <div id="datos">
+                            <div class="form-group row">
+                                <p class="control-label col-md-1" style="font-size: 12px">File:</p>
+                                <div class="col-md-8">
+                                    <input type="file" class="filestyle" data-buttontext=Search required="required" id="Archivo" name="Archivo">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>-->
+
+        <br/><br />
+            @*Listado para grados*@
+
+
+            <div class="row">
+                <div class="col-md-2 col-md-offset-4">
+                    <input type="button" value="Agregar" class="btn btn-primary btn" />
+                </div>
+
+                <div class="col-md-2 col-md-offset-4">
+                    <input type="button" value="Agregar" class="btn btn-primary btn" />
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <table class="table table-striped table-hover col-md-offset-1">
+                        <tr class="active">
+                            <th>ID</th>
+                            <th>Variedad</th>
+                            <th>Color</th>
+                            <th></th>
+                        </tr>
+
+                    </table>
+                </div>
+                <div class="col-md-5 col-md-offset-1">
+                    @*Listado para grados*@
+                    <table class="table table-striped table-hover">
+                        <tr class="active">
+                            <th>ID</th>
+                            <th>Grado</th>
+                            <th></th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            @*Boton para guardar datos*@
+            <div class="form-group">
+                <div class="col-md-offset-10 col-md-10">
+                    <input type="submit" value="Guardar" class="btn btn-primary btn-lg" required>
+                </div>
+            </div>
+        </div>
+            }
+
+            @*<div>
+                @Html.ActionLink("Back to List", "Index")
+            </div>*@

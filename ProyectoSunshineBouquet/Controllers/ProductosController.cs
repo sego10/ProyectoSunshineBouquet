@@ -41,12 +41,31 @@ namespace ProyectoSunshineBouquet.Controllers
             return View();
         }
 
+        public ActionResult MantenimientoProducto()
+        {
+            return View("MantenimientoProducto");
+        }
+
         // POST: Productos/Create
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ProductoId,ProductoNombre,ProductoEspecie")] Producto producto)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Producto.Add(producto);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return View(producto);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult MantenimientoProducto([Bind(Include = "ProductoId,ProductoCodigo,ProductoNombre,ProductoEspecie")] Producto producto)
         {
             if (ModelState.IsValid)
             {

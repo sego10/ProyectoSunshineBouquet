@@ -25,6 +25,7 @@ namespace ProyectoSunshineBouquet.Models
         public int ProductoId { get; set; }
         public string ProductoNombre { get; set; }
         public string ProductoEspecie { get; set; }
+        public string ProductoCodigo { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductoGrado> ProductoGrado { get; set; }

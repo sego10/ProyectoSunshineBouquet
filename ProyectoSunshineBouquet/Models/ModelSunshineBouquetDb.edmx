@@ -11,9 +11,9 @@
           </Key>
           <Property Name="ArchivoId" Type="int" Nullable="false" />
           <Property Name="ProductoId" Type="int" Nullable="false" />
-          <Property Name="ArchivoNombre" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="ArchivoContenido" Type="varbinary(max)" Nullable="false" />
-          <Property Name="ArchivoExtension" Type="char" MaxLength="5" Nullable="false" />
+          <Property Name="ArchivoNombre" Type="varchar" MaxLength="50" />
+          <Property Name="ArchivoContenido" Type="varbinary(max)" />
+          <Property Name="ArchivoExtension" Type="char" MaxLength="5" />
         </EntityType>
         <EntityType Name="Grado">
           <Key>
@@ -27,6 +27,7 @@
             <PropertyRef Name="ProductoId" />
           </Key>
           <Property Name="ProductoId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductoCodigo" Type="varchar" MaxLength="20" />
           <Property Name="ProductoNombre" Type="varchar" MaxLength="60" />
           <Property Name="ProductoEspecie" Type="varchar" MaxLength="60" />
         </EntityType>
@@ -132,6 +133,7 @@
           <NavigationProperty Name="ProductoGrado" Relationship="Self.FK_ProductoGrado_Producto" FromRole="Producto" ToRole="ProductoGrado" />
           <NavigationProperty Name="ProductoVariedad" Relationship="Self.FK_ProductoVariedad_Producto" FromRole="Producto" ToRole="ProductoVariedad" />
           <NavigationProperty Name="Archivo" Relationship="DBSBProductoModel.FK_Archivo_Producto" FromRole="Producto" ToRole="Archivo" />
+          <Property Name="ProductoCodigo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="ProductoGrado">
           <Key>
@@ -210,9 +212,9 @@
           </Key>
           <Property Name="ArchivoId" Type="Int32" Nullable="false" />
           <Property Name="ProductoId" Type="Int32" Nullable="false" />
-          <Property Name="ArchivoNombre" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ArchivoContenido" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
-          <Property Name="ArchivoExtension" Type="String" Nullable="false" MaxLength="5" FixedLength="true" Unicode="false" />
+          <Property Name="ArchivoNombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ArchivoContenido" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="ArchivoExtension" Type="String" MaxLength="5" FixedLength="true" Unicode="false" />
           <NavigationProperty Name="Producto" Relationship="DBSBProductoModel.FK_Archivo_Producto" FromRole="Archivo" ToRole="Producto" />
         </EntityType>
         <Association Name="FK_Archivo_Producto">
@@ -244,6 +246,7 @@
           <EntitySetMapping Name="Producto">
             <EntityTypeMapping TypeName="DBSBProductoModel.Producto">
               <MappingFragment StoreEntitySet="Producto">
+                <ScalarProperty Name="ProductoCodigo" ColumnName="ProductoCodigo" />
                 <ScalarProperty Name="ProductoId" ColumnName="ProductoId" />
                 <ScalarProperty Name="ProductoNombre" ColumnName="ProductoNombre" />
                 <ScalarProperty Name="ProductoEspecie" ColumnName="ProductoEspecie" />

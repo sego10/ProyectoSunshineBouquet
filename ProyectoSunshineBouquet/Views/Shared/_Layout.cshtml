@@ -18,7 +18,7 @@
 
                 <a title="Home" href="~/Productos/Index"> <img src="~/Imagenes/LogoSunshine.png" alt="Home" width="150"> </a>
 
-                @Html.ActionLink("Adicionar Productos", "Index", "Home", new { area = "" }, new { @class = "barra" })
+                @Html.ActionLink("Adicionar Productos", "Index", "Productos", new { area = "" }, new { @class = "barra" })
             </div>
             <br /> <br />
             <br />
@@ -31,9 +31,8 @@
 
                 <div>
                     <ul class="nav navbar-nav">
-                        <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                        <li>@Html.ActionLink("Acerca de", "About", "Home")</li>
-                        <li>@Html.ActionLink("Contacto", "Contact", "Home")</li>
+                        <li>@Html.ActionLink("Adicionar Productos", "MantenimientoProducto", "Productos")</li>
+                        <li>@Html.ActionLink("Listar Productos", "Index", "Productos")</li>
                     </ul>
                 </div>
 
@@ -45,8 +44,8 @@
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Mi aplicación ASP.NET</p>
+        <footer align="center">
+            <p>  &copy; @DateTime.Now.Year - Autor: Edison Segovia. Todos los derechos reservados. </p>
         </footer>
     </div>
 

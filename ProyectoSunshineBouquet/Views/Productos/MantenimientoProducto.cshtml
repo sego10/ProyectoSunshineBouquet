@@ -7,7 +7,7 @@
 
 <h2>Descripción del Producto</h2>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Create","Productos",FormMethod.Post,new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     <hr />
@@ -43,13 +43,34 @@
                     </div>
                 </div>
             </div>
+
             <div class="col-md-6">
-                Imagen
+                <h2>Imagen</h2>
+                
+                Siguiente paso. El usuario ha aceptado la imagen: <br />
+
+                <img src="@Url.Action("Preview", new {file=ViewBag.ImageName})" />
             </div>
         </div>
 
         @* Carga de archivo *@
-        <!--<div class="row">
+    <div class="row">
+        <div class="col-md-12 col-md-offset-7">
+            <form enctype="multipart/form-data" method="post" action="@Url.Action("SendImage")">
+                <label for="img">Seleccionar imagen:</label>
+                <input type="file" name="img" /> <br />
+                <input type="submit" />
+
+                @if (ViewBag.ImageData != null)
+                {
+                    <img src="data:@ViewBag.ImageContentType;base64,@ViewBag.ImageData" />
+                    <input type="hidden" value="@ViewBag.ImageData" name="base64" />
+                    <input type="hidden" value="@ViewBag.ImageContentType" name="contenttype" />
+                }
+            </form>
+        </div>
+    </div>
+            <!--<div class="row">
             <div class="col-md-6">
             </div>
 
@@ -78,42 +99,57 @@
             </div>
         </div>-->
 
-        <br/><br />
+            <br /><br />
             @*Listado para grados*@
 
 
             <div class="row">
-                <div class="col-md-2 col-md-offset-4">
-                    <input type="button" value="Agregar" class="btn btn-primary btn" />
+                <div class="column">
+                    <div class="row">
+                        <div class="col-md-2 col-md-offset-4">
+                            <input type="button" value="Agregar" class="btn btn-primary btn" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <table class="table table-striped table-hover col-md-offset-1">
+                                <tr class="active">
+                                    <th>ID</th>
+                                    <th>Variedad</th>
+                                    <th>Color</th>
+                                    <th></th>
+                                </tr>
+
+                            </table>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="col-md-2 col-md-offset-4">
-                    <input type="button" value="Agregar" class="btn btn-primary btn" />
+                <div class="column">
+                    <div class="row">
+                        <div class="col-md-2 col-md-offset-4">
+                            <input type="button" value="Agregar" class="btn btn-primary btn" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5 col-md-offset-1">
+                            @*Listado para grados*@
+                            <table class="table table-striped table-hover">
+                                <tr class="active">
+                                    <th>ID</th>
+                                    <th>Grado</th>
+                                    <th></th>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-
             </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <table class="table table-striped table-hover col-md-offset-1">
-                        <tr class="active">
-                            <th>ID</th>
-                            <th>Variedad</th>
-                            <th>Color</th>
-                            <th></th>
-                        </tr>
 
-                    </table>
-                </div>
-                <div class="col-md-5 col-md-offset-1">
-                    @*Listado para grados*@
-                    <table class="table table-striped table-hover">
-                        <tr class="active">
-                            <th>ID</th>
-                            <th>Grado</th>
-                            <th></th>
-                        </tr>
-                    </table>
-                </div>
+
+
+            <div class="row">
+
             </div>
 
             @*Boton para guardar datos*@
@@ -123,8 +159,13 @@
                 </div>
             </div>
         </div>
-            }
+        }
 
-            @*<div>
-                @Html.ActionLink("Back to List", "Index")
-            </div>*@
+        @*<div>
+            @Html.ActionLink("Back to List", "Index")
+        </div>*@
+
+        @if (!string.IsNullOrEmpty(ViewBag.ImageUploaded))
+        {
+            <img src="@Url.Action("Preview", new {file=ViewBag.ImageUploaded})" />
+        }

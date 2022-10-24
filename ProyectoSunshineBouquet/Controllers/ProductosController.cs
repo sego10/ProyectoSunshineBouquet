@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -75,6 +76,37 @@ namespace ProyectoSunshineBouquet.Controllers
             }
 
             return View(producto);
+        }
+
+        //codigo para previsualizar la imagen
+        [HttpPost]
+        public ActionResult SendImage(HttpPostedFileBase img, string base64, string contenttype)
+        {
+            if (base64 != null && contenttype != null && img == null)
+            {
+                // Aquí podríamos guardar la imagen (en base64 tenemos los datos)
+                return View("Step2");
+            }
+            var data = new byte[img.ContentLength];
+            img.InputStream.Read(data, 0, img.ContentLength);
+            var base64Data = Convert.ToBase64String(data);
+            ViewBag.ImageData = base64Data;
+            ViewBag.ImageContentType = img.ContentType;
+            return View("Index");
+        }
+
+        public ActionResult Preview(string file)
+        {
+            var path = ControllerContext.HttpContext.Server.MapPath("/");
+            if (!string.IsNullOrEmpty(file))
+            {
+                if (System.IO.File.Exists(Path.Combine(path, file)))
+            {
+                return File(Path.Combine(path, file), "image/jpeg");
+            }
+            }
+
+            return new HttpNotFoundResult();
         }
 
         // GET: Productos/Edit/5

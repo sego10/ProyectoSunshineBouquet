@@ -169,6 +169,7 @@
       <DependentUpon>ModelSunshineBouquetDb.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\ArchivosController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -236,6 +237,11 @@
     <Content Include="Views\Productos\Edit.cshtml" />
     <Content Include="Views\Productos\Index.cshtml" />
     <Content Include="Views\Productos\MantenimientoProducto.cshtml" />
+    <Content Include="Views\Archivos\Create.cshtml" />
+    <Content Include="Views\Archivos\Delete.cshtml" />
+    <Content Include="Views\Archivos\Details.cshtml" />
+    <Content Include="Views\Archivos\Edit.cshtml" />
+    <Content Include="Views\Archivos\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

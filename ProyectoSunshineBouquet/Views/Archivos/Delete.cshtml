@@ -1,0 +1,56 @@
+﻿@model ProyectoSunshineBouquet.Models.Archivo
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Archivo</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ArchivoNombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ArchivoNombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ArchivoContenido)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ArchivoContenido)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ArchivoExtension)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ArchivoExtension)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Producto.ProductoNombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Producto.ProductoNombre)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

@@ -6,25 +6,26 @@
 
 <h2>Productos</h2>
 
-<p>
-    @Html.ActionLink("Agregar", "Create")
-</p>
+
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.ProductoCodigo)
+            ID
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ProductoNombre)
+            NOMBRE
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ProductoEspecie)
+           ESPECIE
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ProductoVariedad)
+            VARIEDAD
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ProductoGrado)
+            GRADO
+        </th>
+        <th>
+            FOTO
         </th>
         <th></th>
     </tr>
@@ -41,13 +42,17 @@
         @Html.DisplayFor(modelItem => item.ProductoEspecie)
     </td>
     <td>
-        @Html.DisplayFor(modelItem => item.ProductoVariedad)
+       
     </td>
     <td>
-        @Html.DisplayFor(modelItem => item.ProductoGrado)
+        
     </td>
     <td>
-        @Html.ActionLink("Edit", "Edit", new { id = item.ProductoId }) |
+        <img width="80" src="@Url.Action("getImage","Productos",new {id = item.ProductoId}) ">
+        @*@Html.DisplayFor(modelItem => item.ProductoImagen)*@
+    </td>
+    <td>
+        @Html.ActionLink("Edit", "EditarProducto", new { id = item.ProductoId }) |
         @Html.ActionLink("Details", "Details", new { id = item.ProductoId }) |
         @Html.ActionLink("Delete", "Delete", new { id = item.ProductoId })
     </td>

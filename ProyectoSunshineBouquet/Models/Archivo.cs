@@ -15,11 +15,8 @@ namespace ProyectoSunshineBouquet.Models
     public partial class Archivo
     {
         public int ArchivoId { get; set; }
-        public int ProductoId { get; set; }
         public string ArchivoNombre { get; set; }
         public byte[] ArchivoContenido { get; set; }
         public string ArchivoExtension { get; set; }
-    
-        public virtual Producto Producto { get; set; }
     }
 }

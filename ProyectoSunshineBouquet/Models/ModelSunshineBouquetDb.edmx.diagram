@@ -13,7 +13,6 @@
         <AssociationConnector Association="DBSBProductoModel.FK_ProductoGrado_Producto" ManuallyRouted="false" />
         <AssociationConnector Association="DBSBProductoModel.FK_ProductoVariedad_Producto" ManuallyRouted="false" />
         <EntityTypeShape EntityType="DBSBProductoModel.Archivo" Width="1.5" PointX="3" PointY="6" />
-        <AssociationConnector Association="DBSBProductoModel.FK_Archivo_Producto" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

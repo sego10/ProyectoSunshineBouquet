@@ -2,12 +2,12 @@
 
 
 @{
-    ViewBag.Title = "MantenimientoProducto";
+    ViewBag.Title = "Edit";
 }
 
 <h2>Descripción del Producto</h2>
 
-@using (Html.BeginForm("MantenimientoProducto","Productos",FormMethod.Post,new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("EditarProducto","Productos",FormMethod.Post,new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     <hr />
@@ -17,12 +17,11 @@
         <div class="row">
             <div class="col-md-6">
 
-                @*@Html.HiddenFor(model => model.ProductoId)*@
-                 
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
+                @Html.HiddenFor(model => model.ProductoId)
+                @*@Html.HiddenFor(model => model.ProductoId)*@
                 <div class="form-group">
-                    @*@Html.Label("ProductoCodigo", "Id", htmlAttributes: new { @class = "control-label col-md-2" })*@
+                    @Html.Label("ProductoCodigo", "Id", htmlAttributes: new { @class = "control-label col-md-2" })
                     @*@Html.LabelFor(model => model.ProductoCodigo, htmlAttributes: new { @class = "control-label col-md-2" })*@
                     <div class="col-md-10">
                         @Html.EditorFor(model => model.ProductoCodigo, new { htmlAttributes = new { @class = "form-control", placeholder = "ID", @data_val = "true", @required = "required" } })
@@ -30,7 +29,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    @*@Html.Label("ProductoNombre","", htmlAttributes: new { @class = "control-label col-md-2" })*@
+                    @Html.Label("ProductoNombre","Nombre", htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
                         @Html.EditorFor(model => model.ProductoNombre, new { htmlAttributes = new { @class = "form-control", placeholder = "Nombre", @data_val = "true", @required = "required" } })
                         @Html.ValidationMessageFor(model => model.ProductoNombre, "", new { @class = "text-danger" })
@@ -39,6 +38,7 @@
 
                 <div class="form-group">
                     @*@Html.LabelFor(model => model.ProductoEspecie, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                    @Html.Label("ProductoEspecie", "Especie", htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
                         @Html.EditorFor(model => model.ProductoEspecie, new { htmlAttributes = new { @class = "form-control", placeholder = "Especie", @data_val = "true", @required = "required" } })
                         @Html.ValidationMessageFor(model => model.ProductoEspecie, "", new { @class = "text-danger" })
@@ -47,7 +47,8 @@
             </div>
 
             <div class="col-md-6">
-                <h2>Imagen</h2>
+                @*<h2>Imagen</h2>*@
+                <img width="400" src= "@Url.Action("getImage","Productos",new {id = Model.ProductoId}) ">
             </div>
         </div>
 
@@ -63,6 +64,8 @@
            
             <br /><br />
             @*Listado para grados*@
+
+
             <div class="row">
                 <div class="col-md-6">
                     <div class="row">
@@ -79,6 +82,7 @@
                                     <th>Color</th>
                                     <th></th>
                                 </tr>
+
                             </table>
                         </div>
                     </div>

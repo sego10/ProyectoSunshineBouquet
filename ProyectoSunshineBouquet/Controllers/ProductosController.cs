@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using ProyectoSunshineBouquet.Models;
 
@@ -66,13 +69,44 @@ namespace ProyectoSunshineBouquet.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult MantenimientoProducto([Bind(Include = "ProductoId,ProductoCodigo,ProductoNombre,ProductoEspecie")] Producto producto)
+        public ActionResult MantenimientoProducto([Bind(Include = "ProductoId,ProductoCodigo,ProductoNombre,ProductoEspecie,ProductoImagen,ProductoImgExt")] Producto producto)
         {
+            HttpPostedFileBase FileBase = Request.Files[0];
+
+
+            if (FileBase.ContentLength == 0)
+            {
+                ModelState.AddModelError("Imagen", "Debe seleccionar una imagen.");
+            }
+            else
+            {
+                if (FileBase.FileName.EndsWith(".jpg") || FileBase.FileName.EndsWith(".png"))
+                {
+                    WebImage image = new WebImage(FileBase.InputStream);
+                    producto.ProductoImagen = image.GetBytes();
+                    producto.ProductoImgExt = image.ImageFormat.ToString();
+                }
+                else
+                {
+                    ModelState.AddModelError("Imagen", "La imagen debe ser .jpg o .png");
+                }
+            }
+           
+                       
+
             if (ModelState.IsValid)
             {
-                db.Producto.Add(producto);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.Producto.Add(producto);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception e)
+                {
+                    ModelState.AddModelError(String.Empty, "Error: "+e.Message); 
+                }
+                
             }
 
             return View(producto);
@@ -123,14 +157,29 @@ namespace ProyectoSunshineBouquet.Controllers
             }
             return View(producto);
         }
+        public ActionResult EditarProducto(int? id)
+        {
+           
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Producto producto = db.Producto.Find(id);
+            if (producto == null)
+            {
+                return HttpNotFound();
+            }
+            return View(producto);
+        }
 
         // POST: Productos/Edit/5
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ProductoId,ProductoNombre,ProductoEspecie")] Producto producto)
+        public ActionResult Edit([Bind(Include = "ProductoId,ProductoCodigo,ProductoNombre,ProductoEspecie,ProductoImagen,ProductoImgExt")] Producto producto)
         {
+           
             if (ModelState.IsValid)
             {
                 db.Entry(producto).State = EntityState.Modified;
@@ -139,6 +188,58 @@ namespace ProyectoSunshineBouquet.Controllers
             }
             return View(producto);
         }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditarProducto([Bind(Include = "ProductoId,ProductoCodigo,ProductoNombre,ProductoEspecie,ProductoImagen,ProductoImgExt")] Producto producto)
+        {
+            //byte[] imagenActual = null;
+            HttpPostedFileBase FileBase = Request.Files[0];
+
+           Producto _producto = new Producto(); 
+
+            if (FileBase.ContentLength == 0)
+            {
+                _producto = db.Producto.Find(producto.ProductoId);
+                producto.ProductoImagen = _producto.ProductoImagen;
+                producto.ProductoImgExt = _producto.ProductoImgExt;
+            }
+            else
+            {
+                if (FileBase.FileName.EndsWith(".jpg") || FileBase.FileName.EndsWith(".png"))
+                {
+                    WebImage image = new WebImage(FileBase.InputStream);
+                    producto.ProductoImagen = image.GetBytes();
+                    producto.ProductoImgExt = image.ImageFormat.ToString();
+                }
+                else
+                {
+                    ModelState.AddModelError("Imagen", "La imagen debe ser .jpg o .png");
+                }
+               
+            }
+            if (ModelState.IsValid)
+            {
+                    try
+                {
+               
+                        db.Entry(_producto).State = EntityState.Detached;
+                        db.Entry(producto).State = EntityState.Modified;
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+                
+                }
+                catch (Exception e)
+                {
+
+                    ModelState.AddModelError(String.Empty, "Error: " + e.InnerException.InnerException);
+                }
+            }   
+
+            return View(producto);
+        }
+
 
         // GET: Productos/Delete/5
         public ActionResult Delete(int? id)
@@ -173,6 +274,50 @@ namespace ProyectoSunshineBouquet.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public ActionResult getImage(int id)
+        {
+            Producto producto = db.Producto.Find(id);
+            byte[] byteImage = producto.ProductoImagen;
+
+            MemoryStream memoryStream = new MemoryStream(byteImage);
+            Image image = Image.FromStream(memoryStream);
+
+            memoryStream = new MemoryStream();
+            if (!string.IsNullOrEmpty(producto.ProductoImgExt))
+            {
+                switch (producto.ProductoImgExt.ToUpper())
+                {
+                    case "PNG":
+                        image.Save(memoryStream, ImageFormat.Png);
+                        break;
+                    case "JPEG":
+                        image.Save(memoryStream, ImageFormat.Jpeg);
+                        break;
+                    case "JPG":
+                        image.Save(memoryStream, ImageFormat.Jpeg);
+                        break;
+                    case "TIFF":
+                        image.Save(memoryStream, ImageFormat.Tiff);
+                        break;
+                    case "BMP":
+                        image.Save(memoryStream, ImageFormat.Bmp);
+                        break;
+                    case "GIF":
+                        image.Save(memoryStream, ImageFormat.Gif);
+                        break;
+
+                    default:
+                        image.Save(memoryStream, ImageFormat.Png);
+                        break;
+                }
+            }
+            memoryStream.Position = 0;
+
+
+            return File(memoryStream,"image/"+producto.ProductoImgExt);
+
         }
     }
 }

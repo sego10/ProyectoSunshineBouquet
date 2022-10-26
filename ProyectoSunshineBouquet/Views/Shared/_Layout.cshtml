@@ -5,8 +5,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Mi aplicación ASP.NET</title>
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <script src="~/Scripts/bootstrap.js"></script>
+    <link href="~/Content/jquery.dataTables.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery.dataTables.js"></script>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+
 </head>
 <body>
 
@@ -33,7 +39,7 @@
                     <ul class="nav navbar-nav">
                         <li>@Html.ActionLink("Adicionar Productos", "MantenimientoProducto", "Productos")</li>
                         <li>@Html.ActionLink("Listar Productos", "Index", "Productos")</li>
-                        <li>@Html.ActionLink("Variedades", "Index", "Productos")</li>
+                        <li>@Html.ActionLink("Variedades", "Index", "Variedades")</li>
                         <li>@Html.ActionLink("Grados", "Index", "Gradoes")</li>
                     </ul>
                 </div>

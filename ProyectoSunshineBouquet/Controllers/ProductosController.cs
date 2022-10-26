@@ -24,6 +24,7 @@ namespace ProyectoSunshineBouquet.Controllers
             return View(db.Producto.ToList());
         }
 
+
         // GET: Productos/Details/5
         public ActionResult Details(int? id)
         {
@@ -100,6 +101,7 @@ namespace ProyectoSunshineBouquet.Controllers
                 {
                     db.Producto.Add(producto);
                     db.SaveChanges();
+                    producto.Insertar(l_indices, l_indicesVar);
                     return RedirectToAction("Index");
                 }
                 catch (Exception e)
@@ -319,5 +321,185 @@ namespace ProyectoSunshineBouquet.Controllers
             return File(memoryStream,"image/"+producto.ProductoImgExt);
 
         }
+
+        // GET: Lista de Grados
+
+        private static List<string> l_indices = new List<string>();
+        private static List<string> l_grados = new List<string>();
+        
+        public ActionResult Modal_ListaGrados()
+        {
+            return View(db.Grado.ToList());
+        }
+        
+        public string agr_atr(string id, string nom)
+        {
+            string res = "";
+            int cont = 0;
+            foreach (var w in l_indices)
+            {
+                if (w.Equals(id))
+                {
+                    cont++;
+                }
+            }
+            if (cont == 0)
+            {
+                if (l_grados.Count < 8)
+                {
+                    string boton_bor = "<button class=\"btn btn-danger\" type='button'"
+                        + " onclick=\"bor_atr('" + id + "')\""
+                        + "><span class=\"glyphicon glyphicon-trash\"> Borrar</span></button>"; //--Esta variable boton_bor representa un boton
+                    l_grados.Add(
+                        "<tr><td>" + id + "</td>"
+                        + "<td>" + nom + "</td>"
+                        + "<td>" + boton_bor + "</td></tr>"
+                        );
+                    l_indices.Add(id);
+                }
+            }
+            foreach (var a in l_grados)
+            {
+                res = res + a;
+            }
+            return res;
+        }
+
+        //--------busqueda
+        [HttpPost]
+        public String bus_atr(string dato_bus)
+        {
+            string res = "";
+            var grados = new List<Grado>();
+
+            Producto prod = new Producto();
+
+            grados = prod.bus_atr(dato_bus);
+            foreach (var a in grados)
+            {
+                int id = a.GradoId;                
+                string nom = a.GradoNombre;              
+                string boton_sel = "<button class=\"btn btn-warning\" type='button'"
+                    + " onclick=\"agr_atr('" + id + "','" + nom + "')\""
+                    + " data-dismiss='modal'><span class=\"glyphicon glyphicon-check\"> Añadir</span></button>";
+                res = res +
+                   "<tr><td>" + id + "</td>"
+                    + "<td>" + nom + "</td>"
+                    + "<td>" + boton_sel + "</td></tr>";
+            }
+            return res;
+        }
+        //--------------Limpieza--------------------
+        [HttpPost]
+        public void limpiar_atr()
+        {
+            l_grados.Clear();
+            l_indices.Clear();
+        }
+
+        //-------------- Borrar de Lista -----------
+        public String bor_atr(string id)
+        {
+            string res = "";
+            l_grados.RemoveAt(l_indices.IndexOf(id));
+            l_indices.RemoveAt(l_indices.IndexOf(id));
+            foreach (var a in l_grados)
+            {
+                res = res + a;
+            }
+            return res;
+        }
+
+        // GET: Lista de Variedades
+
+        private static List<string> l_indicesVar = new List<string>();
+        private static List<string> l_variedades = new List<string>();
+
+        public ActionResult Modal_ListaVariedades()
+        {
+            return View(db.Variedad.ToList());
+        }
+
+        public string agr_variedad(string id, string variedad, string color)
+        {
+            string res = "";
+            int cont = 0;
+            foreach (var w in l_indicesVar)
+            {
+                if (w.Equals(id))
+                {
+                    cont++;
+                }
+            }
+            if (cont == 0)
+            {
+                if (l_variedades.Count < 8)
+                {
+                    string boton_bor = "<button class=\"btn btn-danger\" type='button'"
+                        + " onclick=\"bor_atr('" + id + "')\""
+                        + "><span class=\"glyphicon glyphicon-trash\"> Borrar</span></button>"; //--Esta variable boton_bor representa un boton
+                    l_variedades.Add(
+                        "<tr><td>" + id + "</td>"
+                        + "<td>" + variedad + "</td>"
+                        + "<td>" + color + "</td>"
+                        + "<td>" + boton_bor + "</td></tr>"
+                        );
+                    l_indicesVar.Add(id);
+                }
+            }
+            foreach (var a in l_variedades)
+            {
+                res = res + a;
+            }
+            return res;
+        }
+
+        //--------busqueda
+        [HttpPost]
+        public String bus_variedad(string dato_bus)
+        {
+            string res = "";
+            var variedad = new List<Variedad>();
+
+            Producto prod = new Producto();
+
+            variedad = prod.bus_variedad(dato_bus);
+            foreach (var a in variedad)
+            {
+                int id = a.VariedadId;
+                string nom = a.VariedadNombre;
+                string color = a.VariedadColor;
+                string boton_sel = "<button class=\"btn btn-warning\" type='button'"
+                    + " onclick=\"agr_variedad('" + id + "','" + nom + "','" + color + "')\""
+                    + " data-dismiss='modal'><span class=\"glyphicon glyphicon-check\"> Añadir</span></button>";
+                res = res +
+                   "<tr><td>" + id + "</td>"
+                    + "<td>" + nom + "</td>"
+                    + "<td>" + color + "</td>"
+                    + "<td>" + boton_sel + "</td></tr>";
+            }
+            return res;
+        }
+        //--------------Limpieza--------------------
+        [HttpPost]
+        public void limpiar_variedad()
+        {
+            l_grados.Clear();
+            l_indices.Clear();
+        }
+
+        //-------------- Borrar Alumno de Lista -----------
+        public String bor_variedad(string id)
+        {
+            string res = "";
+            l_variedades.RemoveAt(l_indicesVar.IndexOf(id));
+            l_indicesVar.RemoveAt(l_indicesVar.IndexOf(id));
+            foreach (var a in l_variedades)
+            {
+                res = res + a;
+            }
+            return res;
+        }
+
     }
 }

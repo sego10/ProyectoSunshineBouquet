@@ -5,14 +5,14 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="da1bde3828f84c818efd6e043862eb5f" Name="Diagram1">
-        <EntityTypeShape EntityType="DBSBProductoModel.Grado" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBSBProductoModel.Grado" Width="1.5" PointX="7.125" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DBSBProductoModel.Producto" Width="1.5" PointX="0.75" PointY="2" IsExpanded="true" />
         <EntityTypeShape EntityType="DBSBProductoModel.ProductoGrado" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBSBProductoModel.ProductoVariedad" Width="1.5" PointX="3" PointY="3.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBSBProductoModel.Variedad" Width="1.5" PointX="0.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBSBProductoModel.ProductoVariedad" Width="2.625" PointX="3" PointY="3.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBSBProductoModel.Variedad" Width="1.5" PointX="7.25" PointY="3.375" IsExpanded="true" />
         <AssociationConnector Association="DBSBProductoModel.FK_ProductoGrado_Producto" ManuallyRouted="false" />
         <AssociationConnector Association="DBSBProductoModel.FK_ProductoVariedad_Producto" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="DBSBProductoModel.Archivo" Width="1.5" PointX="3" PointY="6" />
+        <EntityTypeShape EntityType="DBSBProductoModel.Archivo" Width="1.5" PointX="3" PointY="5.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -5,41 +5,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Mi aplicación ASP.NET</title>
-
-
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
-    <link href="~/Content/datatables.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
-
+    <script src="~/Scripts/bootstrap.js"></script>
+    <link href="~/Content/jquery.dataTables.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery.dataTables.js"></script>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-    @*
-
-        <script src="~/Scripts/jquery-3.4.1.js"></script>
-        <script src="~/Scripts/bootstrap.js"></script>
-         <script src="~/Scripts/jquery.dataTables.js"></script>
-        <script src="~/Scripts/dataTables.js"></script>
-
-        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>*@
-
-
-
-
-
 
 </head>
 <body>
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
 
-    <script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-
-
-
-    @RenderSection("scripts", required: false)
     <div>
 
         <div class="container">
@@ -48,7 +24,7 @@
 
                 <a title="Home" href="~/Productos/Index"> <img src="~/Imagenes/LogoSunshine.png" alt="Home" width="150"> </a>
 
-                @Html.ActionLink("Adicionar Productos", "Index", "Productos", new { area = "" }, new { @class = "barra" })
+                @Html.ActionLink("Productos", "Index", "Productos", new { area = "" }, new { @class = "barra" })
             </div>
             <br /> <br />
             <br />
@@ -81,5 +57,8 @@
         </footer>
     </div>
 
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
 </body>
 </html>

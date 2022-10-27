@@ -81,7 +81,7 @@ namespace ProyectoSunshineBouquet.Controllers
             }
             else
             {
-                if (FileBase.FileName.EndsWith(".jpg") || FileBase.FileName.EndsWith(".png"))
+                if (FileBase.FileName.EndsWith(".jpg") || FileBase.FileName.EndsWith(".png") || FileBase.FileName.EndsWith(".png") || FileBase.FileName.EndsWith(".PNG") || FileBase.FileName.EndsWith(".JPG"))
                 {
                     WebImage image = new WebImage(FileBase.InputStream);
                     producto.ProductoImagen = image.GetBytes();

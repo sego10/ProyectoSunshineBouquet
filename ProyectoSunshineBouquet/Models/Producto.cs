@@ -118,15 +118,9 @@ namespace ProyectoSunshineBouquet.Models
 
 
         //----------------------Insertar
-        //public Boolean Insertar(string codigo, bool nombre, string especie, byte[] imagen,string ext, List<string> grados_id, List<string> variedades_id)
-            public Boolean Insertar(List<string> grados_id, List<string> variedades_id)
+        public Boolean Insertar(List<string> grados_id, List<string> variedades_id)
         {
             var estado = false;
-            //string cadena = "'" + codigo + "',";
-            //cadena = cadena + "'" + nombre + "',";
-            //cadena = cadena + "'" + especie + "',";
-            //cadena = cadena + "'" + imagen + "',";
-            //cadena = cadena + "'" + ext + "',";
             try
             {
                 using (var cnx = new Models.DBSBProductoEntities1())
@@ -150,8 +144,91 @@ namespace ProyectoSunshineBouquet.Models
                                i + "," + codigo_libro + ")");
                         }
                     }
+                    estado = true;                  
+                }
+            }
+            catch (Exception)
+            {
+                estado = false;
+                //throw;
+            }
+            return estado;
+        }
 
-                    if (Int32.Parse(codigo_libro) == 1)
+        // Capturar un solo registro (fila) --> ingresando su id
+        public Producto un_registro(int id)
+        {
+            var producto = new Producto();
+            try
+            {
+                using (var cnx = new Models.DBSBProductoEntities1())
+                {
+                    producto = cnx.Producto.Where(r => r.ProductoId == id).Single();
+                }
+            }
+            catch (Exception)
+            {
+                //throw;
+            }
+            return producto;
+        }
+
+        // Actualizar
+        public Boolean Actualizar(int id, List<string> grados_id, List<string> variedades_id)
+        {
+            bool estado = false;
+
+            try
+            {
+                using (var cnx = new Models.DBSBProductoEntities1())
+                {
+                    
+                    //----------------------------------
+                    if (!grados_id.Equals(null))
+                    {
+                        cnx.Database.ExecuteSqlCommand("DELETE FROM ProductoGrado WHERE ProductoId=" + id);
+                        foreach (var i in grados_id)
+                        {  
+                            cnx.Database.ExecuteSqlCommand("INSERT INTO ProductoGrado VALUES(" +
+                                i + "," + id + ")");
+                        }
+                    }
+
+                    if (!variedades_id.Equals(null))
+                    {
+                        cnx.Database.ExecuteSqlCommand("DELETE FROM ProductoVariedad WHERE ProductoId=" + id);
+                        foreach (var i in variedades_id)
+                        {
+                            cnx.Database.ExecuteSqlCommand("INSERT INTO ProductoVariedad VALUES(" +
+                               i + "," + id + ")");
+                        }
+                    }
+                    estado = true;
+                    //-------------------------
+                    
+                }
+            }
+            catch (Exception)
+            {
+                estado = false;
+                //throw;
+            }
+            return estado;
+        }
+
+        //-------------ELIMINAR -------------------
+        public Boolean Eliminar(int id)
+        {
+            bool estado = false;
+            try
+            {
+                using (var cnx = new Models.DBSBProductoEntities1())
+                {
+                    cnx.Database.ExecuteSqlCommand("DELETE FROM ProductoGrado WHERE ProductoId=" + id);
+                    cnx.Database.ExecuteSqlCommand("DELETE FROM ProductoVariedad WHERE ProductoId=" + id);
+
+                    int r = cnx.Database.ExecuteSqlCommand("DELETE FROM Producto WHERE Productoid=" + id);
+                    if (r == 1)
                     {
                         estado = true;
                     }
@@ -165,5 +242,64 @@ namespace ProyectoSunshineBouquet.Models
             return estado;
         }
 
+        //Detalle actualizar
+
+        public List<Grado> det_sec(string id)
+        {
+            var grado = new List<Grado>();
+            string cadena = "SELECT d.* FROM Grado d INNER JOIN "
+                + "ProductoGrado a ON d.GradoId =a.ProductoGradoId WHERE a.ProductoId=" + id;
+            try
+            {
+                using (var contenedor = new Models.DBSBProductoEntities1())
+                {
+                    grado = contenedor.Database.SqlQuery<Grado>(cadena).ToList();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return grado;
+        }
+
+        public List<Variedad> det_variedad(string id)
+        {
+            var variedad = new List<Variedad>();
+            string cadena = "SELECT d.* FROM Variedad d INNER JOIN "
+                + "ProductoVariedad a ON d.VariedadId=a.ProductoVariedadId WHERE a.ProductoId=" + id;
+            try
+            {
+                using (var contenedor = new Models.DBSBProductoEntities1())
+                {
+                    variedad = contenedor.Database.SqlQuery<Variedad>(cadena).ToList();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return variedad;
+        }
+
+        // Busqueda de Seccion ----------------------------------------
+        public List<Producto> bus_sec(string dato_bus)
+        {
+            var lista = new List<Producto>();
+            string cadena = "SELECT * FROM Producto WHERE ProductoNombre LIKE '%"
+                + dato_bus + "%'";
+            try
+            {
+                using (var contenedor = new Models.DBSBProductoEntities1())
+                {
+                    lista = contenedor.Database.SqlQuery<Producto>(cadena).ToList();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return lista;
+        }
     }
 }

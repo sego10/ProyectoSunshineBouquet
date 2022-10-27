@@ -229,6 +229,8 @@ namespace ProyectoSunshineBouquet.Controllers
                         db.Entry(_producto).State = EntityState.Detached;
                         db.Entry(producto).State = EntityState.Modified;
                         db.SaveChanges();
+                    Producto prod = new Producto();
+                    prod.Actualizar(producto.ProductoId, l_indices, l_indicesVar);
                         return RedirectToAction("Index");
                 
                 }
@@ -263,9 +265,11 @@ namespace ProyectoSunshineBouquet.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Producto producto = db.Producto.Find(id);
-            db.Producto.Remove(producto);
-            db.SaveChanges();
+            Producto prod = new Producto();
+            var res = prod.Eliminar(id);
+            //Producto producto = db.Producto.Find(id);
+            //db.Producto.Remove(producto);
+            //db.SaveChanges();
             return RedirectToAction("Index");
         }
 
@@ -484,8 +488,8 @@ namespace ProyectoSunshineBouquet.Controllers
         [HttpPost]
         public void limpiar_variedad()
         {
-            l_grados.Clear();
-            l_indices.Clear();
+            l_variedades.Clear();
+            l_indicesVar.Clear();
         }
 
         //-------------- Borrar Alumno de Lista -----------
@@ -500,6 +504,174 @@ namespace ProyectoSunshineBouquet.Controllers
             }
             return res;
         }
+
+        //----Detalle Actualizar
+
+        public String det_actualizar_sec(string id)
+        {
+            string res = "";
+            var grado = new List<Grado>();
+            Producto producto = new Producto();
+            grado = producto.det_sec(id);
+            foreach (var a in grado)
+            {
+                string boton_bor = "<button class=\"btn btn-danger\" type='button'"
+                        + " onclick=\"bor_atr('" + a.GradoId + "')\""
+                        + "><span class=\"glyphicon glyphicon-trash\"> Borrar</span></button>";
+                l_grados.Add(
+                        "<tr><td>" + a.GradoId + "</td>"
+                        + "<td>" + a.GradoNombre + "</td>"
+                        + "<td>" + boton_bor + "</td></tr>"
+                        );
+                l_indices.Add(a.GradoId.ToString());
+            }
+            foreach (var a in l_grados)
+            {
+                res = res + a;
+            }
+            return res;
+        }
+
+        public String det_actualizar_variedad(string id)
+        {
+            string res = "";
+            var variedad = new List<Variedad>();
+            Producto producto = new Producto();
+            variedad = producto.det_variedad(id);
+            foreach (var a in variedad)
+            {
+                string boton_bor = "<button class=\"btn btn-danger\" type='button'"
+                        + " onclick=\"bor_variedad('" + a.VariedadId + "')\""
+                        + "><span class=\"glyphicon glyphicon-trash\"> Borrar</span></button>";
+                l_variedades.Add(
+                        "<tr><td>" + a.VariedadId + "</td>"
+                        + "<td>" + a.VariedadNombre + "</td>"
+                        + "<td>" + a.VariedadColor + "</td>"
+                        + "<td>" + boton_bor + "</td></tr>"
+                        );
+                l_indicesVar.Add(a.VariedadId.ToString());
+            }
+            foreach (var a in l_variedades)
+            {
+                res = res + a;
+            }
+            return res;
+        }
+
+
+        //------------ Detalle Seccion ----
+        [HttpPost]
+        public String detalle_grado(string id)
+        {
+            l_grados.Clear();
+            l_indices.Clear();
+            string res = "";
+            var grado = new List<Grado>();
+            Producto producto = new Producto();
+            grado = producto.det_sec(id);
+            foreach (var a in grado)
+            {
+                l_grados.Add(
+                     "<tr><td>" + a.GradoId + "</td>"
+                    + "<td>" + a.GradoNombre + "</td></tr>"
+                       );
+                l_indices.Add(a.GradoId.ToString());
+            }
+            foreach (var a in l_grados)
+            {
+                res = res + a;
+            }
+            return res;
+        }
+
+        [HttpPost]
+        public String detalle_variedad(string id)
+        {
+            l_variedades.Clear();
+            l_indicesVar.Clear();
+            string res = "";
+            var variedad = new List<Variedad>();
+            Producto producto = new Producto();
+            variedad = producto.det_variedad(id);
+            foreach (var a in variedad)
+            {
+                l_variedades.Add(
+                     "<tr><td>" + a.VariedadId + "</td>"
+                    + "<td>" + a.VariedadNombre + "</td>"
+                    + "<td>" + a.VariedadColor + "</td></tr>"
+                       );
+                l_indicesVar.Add(a.VariedadId.ToString());
+            }
+            foreach (var a in l_variedades)
+            {
+                res = res + a;
+            }
+            return res;
+        }
+
+        [HttpPost]
+        public ActionResult bus_sec(string tipo_bus, string dato_bus_sec)
+        {
+            
+            if (dato_bus_sec == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var producto = new List<Producto>();
+            producto = db.Producto.Where(p => p.ProductoCodigo == dato_bus_sec).ToList();
+            if (producto == null)
+            {
+                return HttpNotFound();
+            }
+            return View(producto);
+        }
+
+        //----------------------------Busqueda General-------------------
+        //[HttpPost]
+        //public String bus_sec(string dato_bus_sec)
+        //{
+        //    string res = "";
+        //    string tipo = "";
+
+        //    var lista = new List<Producto>();
+        //    Producto prod = new Producto();
+        //    lista = prod.bus_sec(dato_bus_sec);
+        //    var cur = new RegistroSeccion.Models.Model1().Curso.ToList();
+        //    foreach (var l in lista)
+        //    {
+        //        string boton1 = "<button class='btn btn-secondary' type='button' "
+        //                    + "data-target='#modal_detalle_seccion' data-toggle='modal' "
+        //                    + "data-backdrop='static' data-keyboard='false' "
+        //                    + "onclick=\"detalle_seccion('" + l.id_sec + "')\"><span class=\"glyphicon glyphicon-eye-open\"> Detalle Seccion</span></button>";
+
+        //        string boton2 = "<button class='btn btn-warning' type='button' id='btn_act' "
+        //                    + "name='btn_act' onclick=\"location.href='../Seccion/Actualizar?id=" + l.id_sec + "'\">"
+        //                    + "<span class=\"glyphicon glyphicon-edit\"> Actualizar</span></button>";
+
+        //        string boton3 = "<button class='btn btn-danger' type='button' id='btn_eli' name='btn_eli' "
+        //                    + "onclick=\"location.href='../Seccion/Eliminar?id=" + l.id_sec + "'\"><span class=\"glyphicon glyphicon-trash\"> Eliminar</span></button>";
+        //        string estado = "Activo";
+        //        if (l.estado_sec.Equals(false))
+        //        {
+        //            estado = "No " + estado;
+        //        }
+        //        foreach (var c in cur)
+        //        {
+        //            if (l.id_cur == c.id_cur)
+        //            {
+        //                res = res +
+        //            "<tr><td>" + l.id_sec + "</td>"
+        //            + "<td>" + l.aula_sec + "</td>"
+        //            + "<td>" + c.descripcion_cur + "</td>"
+        //            + "<td>" + estado + "</td>"
+        //            + "<td>" + l.fecha_registro_sec.ToString("dd/MM/yyyy") + "</td>"
+        //            + "<td>" + boton1 + " " + boton2 + " " + boton3 + "</td></tr>";
+        //            }
+        //        }
+
+        //    }
+        //    return res;
+        //}
 
     }
 }

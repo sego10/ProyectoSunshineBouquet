@@ -1,0 +1,46 @@
+﻿@*@using (Html.BeginForm("MantenimientoProducto", "Productos", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{*@
+    <div id="modal_detalle_variedad" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Lista Variedades</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered">
+                        <thead style="background-color: darkblue; color:white">
+                            <tr>
+                                <th>ID</th>
+                                <th>Variedad</th>
+                                <th>Color</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla_det_variedad"></tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove"> Cancelar</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+@*  *@
+<script>
+    detalle_variedad = function (codigo) {
+        $.post(
+            '/Productos/detalle_variedad', {
+            id: codigo
+        }, function (res) {
+            $('#tabla_det_variedad').html(res)
+        });
+    };
+
+    //$(document).ready(function () {
+    //    $.post(
+    //        '/Productos/limpiar_variedad', {
+    //    }, null
+    //    );
+    //});
+</script>
+
+

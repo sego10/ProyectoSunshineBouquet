@@ -1,0 +1,46 @@
+﻿@*@using (Html.BeginForm("MantenimientoProducto", "Productos", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{*@
+    <div id="modal_detalle_grado" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Lista de Grados</h4>
+                </div>
+                <div class="modal-body">                    
+                    <table class="table table-bordered">
+                        <thead style="background-color: darkblue; color:white">
+                            <tr>
+                                <th>ID</th>
+                                <th>GRADO</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla_det_grado"></tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove"> Cancelar</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+@*  *@
+<script>
+    detalle_grado = function (codigo) {
+        $.post(
+            '/Productos/detalle_grado', {
+            id: codigo
+        }, function (res) {
+                $('#tabla_det_grado').html(res)
+        });
+    };
+
+    //$(document).ready(function () {
+    //    $.post(
+    //        '/Productos/limpiar_grado', {
+    //    }, null
+    //    );
+    //});
+
+</script>
+
+

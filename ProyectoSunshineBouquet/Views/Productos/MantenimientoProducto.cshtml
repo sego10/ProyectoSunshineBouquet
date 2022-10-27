@@ -121,7 +121,9 @@
         @*Boton para guardar datos*@
         <div class="form-group">
             <div class="col-md-offset-10 col-md-10">
-                <input type="submit" value="Guardar" class="btn btn-primary btn-lg" required>
+                <button class="btn btn-success" type="submit" name="btn1" id="btn1"><span class="glyphicon glyphicon-save"> Guardar</span></button>
+                @*<input type="submit" value="Guardar" class="btn btn-primary btn-lg" required>*@
+                <button class="btn btn-danger" type="reset" name="btn2" onclick="location.href='../Productos/Index'" id="btn2"><span class="glyphicon glyphicon-remove"> Regresar</span></button>
             </div>
         </div>
     </div>
@@ -130,6 +132,3 @@
 @Html.Partial("Modal_ListaVariedades")
 @Html.Partial("Modal_ListaGrados")
 
-@*<div>
-        @Html.ActionLink("Back to List", "Index")
-    </div>*@

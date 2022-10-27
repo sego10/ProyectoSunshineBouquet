@@ -11,7 +11,8 @@ namespace ProyectoSunshineBouquet.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.Linq;
+
     public partial class Producto
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -32,5 +33,273 @@ namespace ProyectoSunshineBouquet.Models
         public virtual ICollection<ProductoGrado> ProductoGrado { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductoVariedad> ProductoVariedad { get; set; }
+
+
+        //-------------------------------- Lista Grados
+        public List<Grado> detalle_seccion(string id)
+        {
+            var grados = new List<Grado>();
+            string cadena = "SELECT a.* FROM Detalle_asig_alumno_seccion d INNER JOIN "
+            + "Alumno a ON d.id_alu=a.id_alu WHERE d.id_sec=" + id;
+            try
+            {
+                using (var contenedor = new Models.DBSBProductoEntities1())
+                {
+                    grados = contenedor.Database.SqlQuery<Grado>(cadena).ToList();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return grados;
+        }
+
+
+        // Busqueda
+        public List<Grado> bus_atr(string dato_bus)
+        {
+            var grado = new List<Grado>();
+            string cadena = "SELECT * FROM Grado WHERE GradoNombre LIKE '%" + dato_bus + "%'";
+            try
+            {
+                using (var contenedor = new Models.DBSBProductoEntities1())
+                {
+                    grado = contenedor.Database.SqlQuery<Grado>(cadena).ToList();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return grado;
+        }
+
+
+        //-------------------------------- Lista Variedades
+        public List<Variedad> detalle_seccion_variedad(string id)
+        {
+            var variedad = new List<Variedad>();
+            string cadena = "SELECT a.* FROM Detalle_asig_alumno_seccion d INNER JOIN "
+            + "Alumno a ON d.id_alu=a.id_alu WHERE d.id_sec=" + id;
+            try
+            {
+                using (var contenedor = new Models.DBSBProductoEntities1())
+                {
+                    variedad = contenedor.Database.SqlQuery<Variedad>(cadena).ToList();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return variedad;
+        }
+
+
+        // Busqueda
+        public List<Variedad> bus_variedad(string dato_bus)
+        {
+            var variedad = new List<Variedad>();
+            string cadena = "SELECT * FROM Variedad WHERE VariedadNombre LIKE '%" + dato_bus + "%'";
+            try
+            {
+                using (var contenedor = new Models.DBSBProductoEntities1())
+                {
+                    variedad = contenedor.Database.SqlQuery<Variedad>(cadena).ToList();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return variedad;
+        }
+
+
+        //----------------------Insertar
+        public Boolean Insertar(List<string> grados_id, List<string> variedades_id)
+        {
+            var estado = false;
+            try
+            {
+                using (var cnx = new Models.DBSBProductoEntities1())
+                {
+                    //int r = cnx.Database.ExecuteSqlCommand("INSERT INTO Producto VALUES(" + cadena + ")");
+                    string codigo_libro = "(SELECT MAX(ProductoId) FROM Producto)";
+                    if (!grados_id.Equals(null))
+                    {
+                        foreach (var i in grados_id)
+                        {
+                            cnx.Database.ExecuteSqlCommand("INSERT INTO ProductoGrado VALUES(" +
+                                i + "," + codigo_libro + ")");
+                        }
+                    }
+
+                    if (!variedades_id.Equals(null))
+                    {
+                        foreach (var i in variedades_id)
+                        {
+                            cnx.Database.ExecuteSqlCommand("INSERT INTO ProductoVariedad VALUES(" +
+                               i + "," + codigo_libro + ")");
+                        }
+                    }
+                    estado = true;                  
+                }
+            }
+            catch (Exception)
+            {
+                estado = false;
+                //throw;
+            }
+            return estado;
+        }
+
+        // Capturar un solo registro (fila) --> ingresando su id
+        public Producto un_registro(int id)
+        {
+            var producto = new Producto();
+            try
+            {
+                using (var cnx = new Models.DBSBProductoEntities1())
+                {
+                    producto = cnx.Producto.Where(r => r.ProductoId == id).Single();
+                }
+            }
+            catch (Exception)
+            {
+                //throw;
+            }
+            return producto;
+        }
+
+        // Actualizar
+        public Boolean Actualizar(int id, List<string> grados_id, List<string> variedades_id)
+        {
+            bool estado = false;
+
+            try
+            {
+                using (var cnx = new Models.DBSBProductoEntities1())
+                {
+                    
+                    //----------------------------------
+                    if (!grados_id.Equals(null))
+                    {
+                        cnx.Database.ExecuteSqlCommand("DELETE FROM ProductoGrado WHERE ProductoId=" + id);
+                        foreach (var i in grados_id)
+                        {  
+                            cnx.Database.ExecuteSqlCommand("INSERT INTO ProductoGrado VALUES(" +
+                                i + "," + id + ")");
+                        }
+                    }
+
+                    if (!variedades_id.Equals(null))
+                    {
+                        cnx.Database.ExecuteSqlCommand("DELETE FROM ProductoVariedad WHERE ProductoId=" + id);
+                        foreach (var i in variedades_id)
+                        {
+                            cnx.Database.ExecuteSqlCommand("INSERT INTO ProductoVariedad VALUES(" +
+                               i + "," + id + ")");
+                        }
+                    }
+                    estado = true;
+                    //-------------------------
+                    
+                }
+            }
+            catch (Exception)
+            {
+                estado = false;
+                //throw;
+            }
+            return estado;
+        }
+
+        //-------------ELIMINAR -------------------
+        public Boolean Eliminar(int id)
+        {
+            bool estado = false;
+            try
+            {
+                using (var cnx = new Models.DBSBProductoEntities1())
+                {
+                    cnx.Database.ExecuteSqlCommand("DELETE FROM ProductoGrado WHERE ProductoId=" + id);
+                    cnx.Database.ExecuteSqlCommand("DELETE FROM ProductoVariedad WHERE ProductoId=" + id);
+
+                    int r = cnx.Database.ExecuteSqlCommand("DELETE FROM Producto WHERE Productoid=" + id);
+                    if (r == 1)
+                    {
+                        estado = true;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                estado = false;
+                //throw;
+            }
+            return estado;
+        }
+
+        //Detalle actualizar
+
+        public List<Grado> det_sec(string id)
+        {
+            var grado = new List<Grado>();
+            string cadena = "SELECT d.* FROM Grado d INNER JOIN "
+                + "ProductoGrado a ON d.GradoId =a.ProductoGradoId WHERE a.ProductoId=" + id;
+            try
+            {
+                using (var contenedor = new Models.DBSBProductoEntities1())
+                {
+                    grado = contenedor.Database.SqlQuery<Grado>(cadena).ToList();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return grado;
+        }
+
+        public List<Variedad> det_variedad(string id)
+        {
+            var variedad = new List<Variedad>();
+            string cadena = "SELECT d.* FROM Variedad d INNER JOIN "
+                + "ProductoVariedad a ON d.VariedadId=a.ProductoVariedadId WHERE a.ProductoId=" + id;
+            try
+            {
+                using (var contenedor = new Models.DBSBProductoEntities1())
+                {
+                    variedad = contenedor.Database.SqlQuery<Variedad>(cadena).ToList();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return variedad;
+        }
+
+        // Busqueda de Seccion ----------------------------------------
+        public List<Producto> bus_sec(string dato_bus)
+        {
+            var lista = new List<Producto>();
+            string cadena = "SELECT * FROM Producto WHERE ProductoNombre LIKE '%"
+                + dato_bus + "%'";
+            try
+            {
+                using (var contenedor = new Models.DBSBProductoEntities1())
+                {
+                    lista = contenedor.Database.SqlQuery<Producto>(cadena).ToList();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return lista;
+        }
     }
 }

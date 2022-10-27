@@ -1,0 +1,76 @@
+﻿@*@using (Html.BeginForm("MantenimientoProducto", "Productos", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{*@
+    <div id="modal_ListaVariedades" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Lista Variedades</h4>
+                </div>
+                <div class="modal-body">
+                    <div style="text-align: right" class="form-inline">
+                        <div class="form-group">
+                            <input type="text" style="text-align: right" placeholder="Variedad a Buscar" class="form-control" id="dato_variedad" />
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="bus_variedad()"><span class="glyphicon glyphicon-search"> Buscar</span></button>
+                    </div>
+                    <br />
+                    <table class="table table-bordered">
+                        <thead style="background-color: darkblue; color:white">
+                            <tr>
+                                <th>ID</th>
+                                <th>Variedad</th>
+                                <th>Color</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla_bus_variedad"></tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove"> Cancelar</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+@*  *@
+<script>
+    bus_variedad = function () {
+        $.post(
+            '/Productos/bus_variedad', {
+            dato_bus: $('#dato_variedad').val()//en este caso sería el codigo
+        }, function (res) {
+            $('#tabla_bus_variedad').html(res)
+        });
+    };
+    agr_variedad = function (id, variedad, color) {
+        $.post(
+            '/Productos/agr_variedad', {
+            id: id,
+            variedad: variedad,
+            color: color
+
+        }, function (res) {
+            $('#tabla_variedad').html(res);
+            $('#tabla_bus_variedad').html('');
+            $('#dato_variedad').val('');
+        });
+    };
+
+    bor_variedad = function (id) {
+        $.post(
+            '/Productos/bor_variedad', {
+            id: id
+        }, function (res) {
+            $('#tabla_variedad').html(res)
+        });
+    };
+
+    $(document).ready(function () {
+        $.post(
+            '/Productos/limpiar_variedad', {
+        }, null
+        );
+    });
+</script>
+
+

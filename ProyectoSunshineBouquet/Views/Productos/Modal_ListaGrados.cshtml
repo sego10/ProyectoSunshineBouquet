@@ -1,0 +1,73 @@
+﻿@*@using (Html.BeginForm("MantenimientoProducto", "Productos", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{*@
+    <div id="modal_ListaGrados" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Lista de Grados</h4>
+                </div>
+                <div class="modal-body">
+                    <div style="text-align: right" class="form-inline">
+                        <div class="form-group">
+                            <input type="text" style="text-align: right" placeholder="Ingresar Grado Para Buscar" class="form-control" id="dato_bus" />
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="bus_atr()"><span class="glyphicon glyphicon-search"> Buscar</span></button>
+                    </div>
+                    <br />
+                    <table class="table table-bordered">
+                        <thead style="background-color: darkblue; color:white">
+                            <tr>
+                                <th>ID</th>
+                                <th>GRADO</th>
+                                <th>ACCION</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla_bus_atr"></tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove"> Cancelar</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+@*  *@
+<script>
+    bus_atr = function () {
+        $.post(
+            '/Productos/bus_atr', {
+            dato_bus: $('#dato_bus').val()//en este caso sería el codigo
+        }, function (res) {
+            $('#tabla_bus_atr').html(res)
+        });
+    };
+    agr_atr = function (id, nom) {
+        $.post(
+            '/Productos/agr_atr', {
+            id: id,
+            nom: nom
+        }, function (res) {
+            $('#tabla_atr').html(res);
+            $('#tabla_bus_atr').html('');
+            $('#dato_bus').val('');
+        });
+    };
+
+    bor_atr = function (id) {
+        $.post(
+            '/Productos/bor_atr', {
+            id: id
+        }, function (res) {
+            $('#tabla_atr').html(res)
+        });
+    };
+
+    $(document).ready(function () {
+        $.post(
+            '/Productos/limpiar_atr', {
+        }, null
+        );
+    });
+</script>
+
+

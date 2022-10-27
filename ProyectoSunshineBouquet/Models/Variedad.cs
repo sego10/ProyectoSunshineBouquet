@@ -15,7 +15,6 @@ namespace ProyectoSunshineBouquet.Models
     public partial class Variedad
     {
         public int VariedadId { get; set; }
-        public string VariedadCodigo { get; set; }
         public string VariedadNombre { get; set; }
         public string VariedadColor { get; set; }
     }

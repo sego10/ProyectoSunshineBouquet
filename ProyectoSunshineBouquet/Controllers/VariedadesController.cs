@@ -10,112 +10,107 @@ using ProyectoSunshineBouquet.Models;
 
 namespace ProyectoSunshineBouquet.Controllers
 {
-    public class GradoesController : Controller
+    public class VariedadesController : Controller
     {
         private DBSBProductoEntities1 db = new DBSBProductoEntities1();
 
-        // GET: Gradoes
+        // GET: Variedades
         public ActionResult Index()
         {
-            return View(db.Grado.ToList());
+            return View(db.Variedad.ToList());
         }
 
-        public ActionResult Modal_ListaGrados()
-        {
-            return View(db.Grado.ToList());
-        }
-
-        // GET: Gradoes/Details/5
+        // GET: Variedades/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Grado grado = db.Grado.Find(id);
-            if (grado == null)
+            Variedad variedad = db.Variedad.Find(id);
+            if (variedad == null)
             {
                 return HttpNotFound();
             }
-            return View(grado);
+            return View(variedad);
         }
 
-        // GET: Gradoes/Create
+        // GET: Variedades/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Gradoes/Create
+        // POST: Variedades/Create
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "GradoId,GradoNombre")] Grado grado)
+        public ActionResult Create([Bind(Include = "VariedadId,VariedadNombre,VariedadColor")] Variedad variedad)
         {
             if (ModelState.IsValid)
             {
-                db.Grado.Add(grado);
+                db.Variedad.Add(variedad);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(grado);
+            return View(variedad);
         }
 
-        // GET: Gradoes/Edit/5
+        // GET: Variedades/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Grado grado = db.Grado.Find(id);
-            if (grado == null)
+            Variedad variedad = db.Variedad.Find(id);
+            if (variedad == null)
             {
                 return HttpNotFound();
             }
-            return View(grado);
+            return View(variedad);
         }
 
-        // POST: Gradoes/Edit/5
+        // POST: Variedades/Edit/5
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "GradoId,GradoNombre")] Grado grado)
+        public ActionResult Edit([Bind(Include = "VariedadId,VariedadNombre,VariedadColor")] Variedad variedad)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(grado).State = EntityState.Modified;
+                db.Entry(variedad).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(grado);
+            return View(variedad);
         }
 
-        // GET: Gradoes/Delete/5
+        // GET: Variedades/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Grado grado = db.Grado.Find(id);
-            if (grado == null)
+            Variedad variedad = db.Variedad.Find(id);
+            if (variedad == null)
             {
                 return HttpNotFound();
             }
-            return View(grado);
+            return View(variedad);
         }
 
-        // POST: Gradoes/Delete/5
+        // POST: Variedades/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Grado grado = db.Grado.Find(id);
-            db.Grado.Remove(grado);
+            Variedad variedad = db.Variedad.Find(id);
+            db.Variedad.Remove(variedad);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

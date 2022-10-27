@@ -7,7 +7,7 @@
 
 <h2>Descripción del Producto</h2>
 
-@using (Html.BeginForm("MantenimientoProducto","Productos",FormMethod.Post,new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("MantenimientoProducto", "Productos", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     <hr />
@@ -18,7 +18,7 @@
             <div class="col-md-6">
 
                 @*@Html.HiddenFor(model => model.ProductoId)*@
-                 
+
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
                 <div class="form-group">
@@ -52,74 +52,83 @@
         </div>
 
         @* Carga de archivo *@
+        <div class="row">
+            <div class="col-md-12 col-md-offset-7">
+                <label for="img">Seleccionar imagen:</label>
+                @*@Html.EditorFor(model => model.ProductoImagen, new { htmlAttributes = new { @class = "form-control", @data_val = "true", @required = "required" } })*@
+                <input type="file" name="img" required = "required"/> <br />
+                @Html.ValidationMessageFor(model => model.ProductoImagen, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <br /><br />
+        @*Listado para Variedades*@
     <div class="row">
-        <div class="col-md-12 col-md-offset-7">
-            <label for="img">Seleccionar imagen:</label>
-            @*@Html.EditorFor(model => model.ProductoImagen, new { htmlAttributes = new { @class = "form-control", @data_val = "true", @required = "required" } })*@
-            <input type="file" name="img" /> <br />
-            @Html.ValidationMessageFor(model => model.ProductoImagen, "", new { @class = "text-danger" })
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-2 col-md-offset-4">
+                    <button class="btn btn-primary btn" type="button"
+                            data-target="#modal_ListaVariedades" data-toggle="modal"
+                            data-backdrop="static" data-keyboard="false">
+                        <span class="glyphicon glyphicon-plus"> Agregar</span>
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <table class="table table-bordered">
+                        <thead style="background-color: darkgrey; color:white">
+                            <tr><th>ID</th><th>Variedad</th><th>Color</th><th>Acción</th></tr>
+                        </thead>
+                        <tbody id="tabla_variedad"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        @*Listado para Grados*@
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-2 col-md-offset-4">
+                    <button class="btn btn-primary btn" type="button"
+                            data-target="#modal_ListaGrados" data-toggle="modal"
+                            data-backdrop="static" data-keyboard="false">
+                        <span class="glyphicon glyphicon-plus"> Agregar</span>
+                    </button>
+
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                 
+                    <table class="table table-bordered">
+                        <thead style="background-color: darkgrey; color:white">
+                            <tr><th>ID</th><th>GRADO</th><th>Acción</th></tr>
+                        </thead>
+                        <tbody id="tabla_atr"></tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
-           
-            <br /><br />
-            @*Listado para grados*@
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="row">
-                        <div class="col-md-2 col-md-offset-4">
-                            <input type="button" value="Agregar" class="btn btn-primary btn" />
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <table class="table table-striped table-hover col-md-offset-1">
-                                <tr class="active">
-                                    <th>ID</th>
-                                    <th>Variedad</th>
-                                    <th>Color</th>
-                                    <th></th>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="row">
-                        <div class="col-md-2 col-md-offset-4">
-                            <input type="button" value="Agregar" class="btn btn-primary btn" />
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-5 col-md-offset-1">
-                            @*Listado para grados*@
-                            <table class="table table-striped table-hover">
-                                <tr class="active">
-                                    <th>ID</th>
-                                    <th>Grado</th>
-                                    <th></th>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
 
 
-            <div class="row">
+        <div class="row">
 
-            </div>
+        </div>
 
-            @*Boton para guardar datos*@
-            <div class="form-group">
-                <div class="col-md-offset-10 col-md-10">
-                    <input type="submit" value="Guardar" class="btn btn-primary btn-lg" required>
-                </div>
+        @*Boton para guardar datos*@
+        <div class="form-group">
+            <div class="col-md-offset-10 col-md-10">
+                <button class="btn btn-success" type="submit" name="btn1" id="btn1"><span class="glyphicon glyphicon-save"> Guardar</span></button>
+                @*<input type="submit" value="Guardar" class="btn btn-primary btn-lg" required>*@
+                <button class="btn btn-danger" type="reset" name="btn2" onclick="location.href='../Productos/Index'" id="btn2"><span class="glyphicon glyphicon-remove"> Regresar</span></button>
             </div>
         </div>
-        }
+    </div>
+}
 
-        @*<div>
-            @Html.ActionLink("Back to List", "Index")
-        </div>*@
+@Html.Partial("Modal_ListaVariedades")
+@Html.Partial("Modal_ListaGrados")
+

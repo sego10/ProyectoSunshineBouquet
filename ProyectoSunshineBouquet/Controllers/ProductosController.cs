@@ -24,6 +24,7 @@ namespace ProyectoSunshineBouquet.Controllers
             return View(db.Producto.ToList());
         }
 
+
         // GET: Productos/Details/5
         public ActionResult Details(int? id)
         {
@@ -80,7 +81,7 @@ namespace ProyectoSunshineBouquet.Controllers
             }
             else
             {
-                if (FileBase.FileName.EndsWith(".jpg") || FileBase.FileName.EndsWith(".png"))
+                if (FileBase.FileName.EndsWith(".jpg") || FileBase.FileName.EndsWith(".png") || FileBase.FileName.EndsWith(".png") || FileBase.FileName.EndsWith(".PNG") || FileBase.FileName.EndsWith(".JPG"))
                 {
                     WebImage image = new WebImage(FileBase.InputStream);
                     producto.ProductoImagen = image.GetBytes();
@@ -100,6 +101,7 @@ namespace ProyectoSunshineBouquet.Controllers
                 {
                     db.Producto.Add(producto);
                     db.SaveChanges();
+                    producto.Insertar(l_indices, l_indicesVar);
                     return RedirectToAction("Index");
                 }
                 catch (Exception e)
@@ -227,6 +229,8 @@ namespace ProyectoSunshineBouquet.Controllers
                         db.Entry(_producto).State = EntityState.Detached;
                         db.Entry(producto).State = EntityState.Modified;
                         db.SaveChanges();
+                    Producto prod = new Producto();
+                    prod.Actualizar(producto.ProductoId, l_indices, l_indicesVar);
                         return RedirectToAction("Index");
                 
                 }
@@ -261,9 +265,11 @@ namespace ProyectoSunshineBouquet.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Producto producto = db.Producto.Find(id);
-            db.Producto.Remove(producto);
-            db.SaveChanges();
+            Producto prod = new Producto();
+            var res = prod.Eliminar(id);
+            //Producto producto = db.Producto.Find(id);
+            //db.Producto.Remove(producto);
+            //db.SaveChanges();
             return RedirectToAction("Index");
         }
 
@@ -319,5 +325,353 @@ namespace ProyectoSunshineBouquet.Controllers
             return File(memoryStream,"image/"+producto.ProductoImgExt);
 
         }
+
+        // GET: Lista de Grados
+
+        private static List<string> l_indices = new List<string>();
+        private static List<string> l_grados = new List<string>();
+        
+        public ActionResult Modal_ListaGrados()
+        {
+            return View(db.Grado.ToList());
+        }
+        
+        public string agr_atr(string id, string nom)
+        {
+            string res = "";
+            int cont = 0;
+            foreach (var w in l_indices)
+            {
+                if (w.Equals(id))
+                {
+                    cont++;
+                }
+            }
+            if (cont == 0)
+            {
+                if (l_grados.Count < 8)
+                {
+                    string boton_bor = "<button class=\"btn btn-danger\" type='button'"
+                        + " onclick=\"bor_atr('" + id + "')\""
+                        + "><span class=\"glyphicon glyphicon-trash\"> Borrar</span></button>"; //--Esta variable boton_bor representa un boton
+                    l_grados.Add(
+                        "<tr><td>" + id + "</td>"
+                        + "<td>" + nom + "</td>"
+                        + "<td>" + boton_bor + "</td></tr>"
+                        );
+                    l_indices.Add(id);
+                }
+            }
+            foreach (var a in l_grados)
+            {
+                res = res + a;
+            }
+            return res;
+        }
+
+        //--------busqueda
+        [HttpPost]
+        public String bus_atr(string dato_bus)
+        {
+            string res = "";
+            var grados = new List<Grado>();
+
+            Producto prod = new Producto();
+
+            grados = prod.bus_atr(dato_bus);
+            foreach (var a in grados)
+            {
+                int id = a.GradoId;                
+                string nom = a.GradoNombre;              
+                string boton_sel = "<button class=\"btn btn-warning\" type='button'"
+                    + " onclick=\"agr_atr('" + id + "','" + nom + "')\""
+                    + " data-dismiss='modal'><span class=\"glyphicon glyphicon-check\"> Añadir</span></button>";
+                res = res +
+                   "<tr><td>" + id + "</td>"
+                    + "<td>" + nom + "</td>"
+                    + "<td>" + boton_sel + "</td></tr>";
+            }
+            return res;
+        }
+        //--------------Limpieza--------------------
+        [HttpPost]
+        public void limpiar_atr()
+        {
+            l_grados.Clear();
+            l_indices.Clear();
+        }
+
+        //-------------- Borrar de Lista -----------
+        public String bor_atr(string id)
+        {
+            string res = "";
+            l_grados.RemoveAt(l_indices.IndexOf(id));
+            l_indices.RemoveAt(l_indices.IndexOf(id));
+            foreach (var a in l_grados)
+            {
+                res = res + a;
+            }
+            return res;
+        }
+
+        // GET: Lista de Variedades
+
+        private static List<string> l_indicesVar = new List<string>();
+        private static List<string> l_variedades = new List<string>();
+
+        public ActionResult Modal_ListaVariedades()
+        {
+            return View(db.Variedad.ToList());
+        }
+
+        public string agr_variedad(string id, string variedad, string color)
+        {
+            string res = "";
+            int cont = 0;
+            foreach (var w in l_indicesVar)
+            {
+                if (w.Equals(id))
+                {
+                    cont++;
+                }
+            }
+            if (cont == 0)
+            {
+                if (l_variedades.Count < 8)
+                {
+                    string boton_bor = "<button class=\"btn btn-danger\" type='button'"
+                        + " onclick=\"bor_atr('" + id + "')\""
+                        + "><span class=\"glyphicon glyphicon-trash\"> Borrar</span></button>"; //--Esta variable boton_bor representa un boton
+                    l_variedades.Add(
+                        "<tr><td>" + id + "</td>"
+                        + "<td>" + variedad + "</td>"
+                        + "<td>" + color + "</td>"
+                        + "<td>" + boton_bor + "</td></tr>"
+                        );
+                    l_indicesVar.Add(id);
+                }
+            }
+            foreach (var a in l_variedades)
+            {
+                res = res + a;
+            }
+            return res;
+        }
+
+        //--------busqueda
+        [HttpPost]
+        public String bus_variedad(string dato_bus)
+        {
+            string res = "";
+            var variedad = new List<Variedad>();
+
+            Producto prod = new Producto();
+
+            variedad = prod.bus_variedad(dato_bus);
+            foreach (var a in variedad)
+            {
+                int id = a.VariedadId;
+                string nom = a.VariedadNombre;
+                string color = a.VariedadColor;
+                string boton_sel = "<button class=\"btn btn-warning\" type='button'"
+                    + " onclick=\"agr_variedad('" + id + "','" + nom + "','" + color + "')\""
+                    + " data-dismiss='modal'><span class=\"glyphicon glyphicon-check\"> Añadir</span></button>";
+                res = res +
+                   "<tr><td>" + id + "</td>"
+                    + "<td>" + nom + "</td>"
+                    + "<td>" + color + "</td>"
+                    + "<td>" + boton_sel + "</td></tr>";
+            }
+            return res;
+        }
+        //--------------Limpieza--------------------
+        [HttpPost]
+        public void limpiar_variedad()
+        {
+            l_variedades.Clear();
+            l_indicesVar.Clear();
+        }
+
+        //-------------- Borrar Alumno de Lista -----------
+        public String bor_variedad(string id)
+        {
+            string res = "";
+            l_variedades.RemoveAt(l_indicesVar.IndexOf(id));
+            l_indicesVar.RemoveAt(l_indicesVar.IndexOf(id));
+            foreach (var a in l_variedades)
+            {
+                res = res + a;
+            }
+            return res;
+        }
+
+        //----Detalle Actualizar
+
+        public String det_actualizar_sec(string id)
+        {
+            string res = "";
+            var grado = new List<Grado>();
+            Producto producto = new Producto();
+            grado = producto.det_sec(id);
+            foreach (var a in grado)
+            {
+                string boton_bor = "<button class=\"btn btn-danger\" type='button'"
+                        + " onclick=\"bor_atr('" + a.GradoId + "')\""
+                        + "><span class=\"glyphicon glyphicon-trash\"> Borrar</span></button>";
+                l_grados.Add(
+                        "<tr><td>" + a.GradoId + "</td>"
+                        + "<td>" + a.GradoNombre + "</td>"
+                        + "<td>" + boton_bor + "</td></tr>"
+                        );
+                l_indices.Add(a.GradoId.ToString());
+            }
+            foreach (var a in l_grados)
+            {
+                res = res + a;
+            }
+            return res;
+        }
+
+        public String det_actualizar_variedad(string id)
+        {
+            string res = "";
+            var variedad = new List<Variedad>();
+            Producto producto = new Producto();
+            variedad = producto.det_variedad(id);
+            foreach (var a in variedad)
+            {
+                string boton_bor = "<button class=\"btn btn-danger\" type='button'"
+                        + " onclick=\"bor_variedad('" + a.VariedadId + "')\""
+                        + "><span class=\"glyphicon glyphicon-trash\"> Borrar</span></button>";
+                l_variedades.Add(
+                        "<tr><td>" + a.VariedadId + "</td>"
+                        + "<td>" + a.VariedadNombre + "</td>"
+                        + "<td>" + a.VariedadColor + "</td>"
+                        + "<td>" + boton_bor + "</td></tr>"
+                        );
+                l_indicesVar.Add(a.VariedadId.ToString());
+            }
+            foreach (var a in l_variedades)
+            {
+                res = res + a;
+            }
+            return res;
+        }
+
+
+        //------------ Detalle Seccion ----
+        [HttpPost]
+        public String detalle_grado(string id)
+        {
+            l_grados.Clear();
+            l_indices.Clear();
+            string res = "";
+            var grado = new List<Grado>();
+            Producto producto = new Producto();
+            grado = producto.det_sec(id);
+            foreach (var a in grado)
+            {
+                l_grados.Add(
+                     "<tr><td>" + a.GradoId + "</td>"
+                    + "<td>" + a.GradoNombre + "</td></tr>"
+                       );
+                l_indices.Add(a.GradoId.ToString());
+            }
+            foreach (var a in l_grados)
+            {
+                res = res + a;
+            }
+            return res;
+        }
+
+        [HttpPost]
+        public String detalle_variedad(string id)
+        {
+            l_variedades.Clear();
+            l_indicesVar.Clear();
+            string res = "";
+            var variedad = new List<Variedad>();
+            Producto producto = new Producto();
+            variedad = producto.det_variedad(id);
+            foreach (var a in variedad)
+            {
+                l_variedades.Add(
+                     "<tr><td>" + a.VariedadId + "</td>"
+                    + "<td>" + a.VariedadNombre + "</td>"
+                    + "<td>" + a.VariedadColor + "</td></tr>"
+                       );
+                l_indicesVar.Add(a.VariedadId.ToString());
+            }
+            foreach (var a in l_variedades)
+            {
+                res = res + a;
+            }
+            return res;
+        }
+
+        [HttpPost]
+        public ActionResult bus_sec(string tipo_bus, string dato_bus_sec)
+        {
+            
+            if (dato_bus_sec == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var producto = new List<Producto>();
+            producto = db.Producto.Where(p => p.ProductoCodigo == dato_bus_sec).ToList();
+            if (producto == null)
+            {
+                return HttpNotFound();
+            }
+            return View(producto);
+        }
+
+        //----------------------------Busqueda General-------------------
+        //[HttpPost]
+        //public String bus_sec(string dato_bus_sec)
+        //{
+        //    string res = "";
+        //    string tipo = "";
+
+        //    var lista = new List<Producto>();
+        //    Producto prod = new Producto();
+        //    lista = prod.bus_sec(dato_bus_sec);
+        //    var cur = new RegistroSeccion.Models.Model1().Curso.ToList();
+        //    foreach (var l in lista)
+        //    {
+        //        string boton1 = "<button class='btn btn-secondary' type='button' "
+        //                    + "data-target='#modal_detalle_seccion' data-toggle='modal' "
+        //                    + "data-backdrop='static' data-keyboard='false' "
+        //                    + "onclick=\"detalle_seccion('" + l.id_sec + "')\"><span class=\"glyphicon glyphicon-eye-open\"> Detalle Seccion</span></button>";
+
+        //        string boton2 = "<button class='btn btn-warning' type='button' id='btn_act' "
+        //                    + "name='btn_act' onclick=\"location.href='../Seccion/Actualizar?id=" + l.id_sec + "'\">"
+        //                    + "<span class=\"glyphicon glyphicon-edit\"> Actualizar</span></button>";
+
+        //        string boton3 = "<button class='btn btn-danger' type='button' id='btn_eli' name='btn_eli' "
+        //                    + "onclick=\"location.href='../Seccion/Eliminar?id=" + l.id_sec + "'\"><span class=\"glyphicon glyphicon-trash\"> Eliminar</span></button>";
+        //        string estado = "Activo";
+        //        if (l.estado_sec.Equals(false))
+        //        {
+        //            estado = "No " + estado;
+        //        }
+        //        foreach (var c in cur)
+        //        {
+        //            if (l.id_cur == c.id_cur)
+        //            {
+        //                res = res +
+        //            "<tr><td>" + l.id_sec + "</td>"
+        //            + "<td>" + l.aula_sec + "</td>"
+        //            + "<td>" + c.descripcion_cur + "</td>"
+        //            + "<td>" + estado + "</td>"
+        //            + "<td>" + l.fecha_registro_sec.ToString("dd/MM/yyyy") + "</td>"
+        //            + "<td>" + boton1 + " " + boton2 + " " + boton3 + "</td></tr>";
+        //            }
+        //        }
+
+        //    }
+        //    return res;
+        //}
+
     }
 }

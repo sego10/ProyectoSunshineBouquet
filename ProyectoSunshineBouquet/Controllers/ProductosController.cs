@@ -106,7 +106,7 @@ namespace ProyectoSunshineBouquet.Controllers
                 }
                 catch (Exception e)
                 {
-                    ModelState.AddModelError(String.Empty, "Error: "+e.Message); 
+                    ModelState.AddModelError(String.Empty, "Error: Id ya existe, porvafor ingrese un valor diferente."); 
                 }
                 
             }
